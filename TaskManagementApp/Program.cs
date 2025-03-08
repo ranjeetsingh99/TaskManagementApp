@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using TaskManagementApp.Common;
 using TaskManagementApp.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//getting app info from appsettings.json
+AppInfo.Load(builder.Configuration);
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

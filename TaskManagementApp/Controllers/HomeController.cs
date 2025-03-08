@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using TaskManagementApp.Common;
 using TaskManagementApp.Models;
 
 namespace TaskManagementApp.Controllers;
@@ -15,6 +16,7 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        ViewData["Title"] = AppInfo.Title;
         return View();
     }
 
