@@ -23,9 +23,9 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd();
 
-            entity.Property(t => t.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()")
-            .ValueGeneratedOnAddOrUpdate();
+            //entity.Property(t => t.UpdatedAt)
+            //.HasDefaultValueSql("GETUTCDATE()")
+            //.ValueGeneratedOnAddOrUpdate();
         });
 
         builder.Entity<User>(entity =>
@@ -34,9 +34,30 @@ public class ApplicationDbContext : IdentityDbContext<User>
             .HasDefaultValueSql("GETUTCDATE()")
             .ValueGeneratedOnAdd();
 
-            entity.Property(u => u.UpdatedAt)
-            .HasDefaultValueSql("GETUTCDATE()")
-            .ValueGeneratedOnAddOrUpdate();
-        }); 
+            //entity.Property(u => u.UpdatedAt)
+            //.HasDefaultValueSql("GETUTCDATE()")
+            //.ValueGeneratedOnAddOrUpdate();
+        });
+    }
+
+    public override int SaveChanges()
+    {
+        UpdateTimeStamps();
+        return base.SaveChanges();
+    }
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken=default)
+    {
+        UpdateTimeStamps();
+        return await base.SaveChangesAsync(cancellationToken);
+    }
+
+    private void UpdateTimeStamps()
+    {
+        var modifiedEntries = ChangeTracker.Entries<TaskItem>().Where(e => e.State == EntityState.Modified);
+
+        foreach(var entry in modifiedEntries)
+        {
+            entry.Entity.UpdatedAt = DateTime.UtcNow;
+        }
     }
 }

@@ -37,17 +37,25 @@ public class TaskItem
     public TaskStatus Status { get; set; } = TaskStatus.Pending;
 
 
-    public DateTime CreatedAt { get; private set; } 
+    public DateTime CreatedAt { get; set; } 
 
     public DateTime UpdatedAt { get; set; }
 
 
     [ForeignKey("CreatedBy")]
     public string CreatedById { get; set; } = string.Empty;
-    public virtual User CreatedBy { get; set; } = null!;
+    public virtual User? CreatedBy { get; set; } 
 
     [ForeignKey("AssignedTo")]
     public string? AssignedToId { get; set; }
-    public virtual User AssignedTo { get; set; } = null!;
+    public virtual User? AssignedTo { get; set; }
 
+
+    public void PrintProperties()
+    {
+        foreach(var prop in this.GetType().GetProperties())
+        {
+            Console.WriteLine($"{prop.Name} = {prop.GetValue(this)}");
+        }
+    }
 }
